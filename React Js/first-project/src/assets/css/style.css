@@ -1,0 +1,59 @@
+*{
+    margin: 0px;
+    padding: 0px;
+}
+
+.header{
+    background-color: black;
+    color: white;
+    text-align: center;
+    padding: 40px;
+    font-size: 40px;
+}
+.outer_services{
+    max-width: 1400px;
+    margin: auto;
+}
+
+.service_heading{
+    text-align: center;
+    padding: 30px;
+}
+
+.service_heading h1{
+    margin-bottom: 15px;
+}
+.service_heading p{
+    font-size: 18px;
+}
+
+.inner_services{
+    display: flex;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.serviceImage img{
+    width: 100%;
+}
+
+.services{
+    box-shadow: 0px 0px 4px 1px dimgray;
+    flex-basis: 23%;
+    flex-grow: 1;
+}
+.serviceContent{
+    padding: 15px;
+}
+.serviceContent h2{
+    margin-bottom: 15px;
+}
+.serviceContent p{
+    text-align: justify;
+    line-height: 27px;
+}
+.serviceContent h3{
+    margin-top: 15px;
+    color: red;
+}

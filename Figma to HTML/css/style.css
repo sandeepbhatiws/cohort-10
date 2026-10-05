@@ -1,0 +1,81 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+*{
+    margin: 0px;
+    padding: 0px;
+}
+
+a{
+    text-decoration: none;
+    color: black;
+}
+
+body{
+    font-family: "Inter", sans-serif;
+}
+
+.main{
+    width: 100%;
+}
+.outer_header{
+    width: 100%;
+    border: 1px solid red;
+    box-sizing: border-box;
+}
+.inner_header{
+    max-width: 1170px;
+    border: 1px solid black;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 22px;
+    box-sizing: border-box;
+}
+.header_right{
+    display: flex;
+    gap: 10px;
+}
+.outer_chat{
+    display: flex;
+    opacity: 1;
+    border-radius: 8px;
+    border-width: 1px;
+    padding-top: 10px;
+    padding-right: 18px;
+    padding-bottom: 10px;
+    padding-left: 18px;
+    gap: 10px;
+    background: #FFFFFF;
+    border: 1px solid #27AE60;
+    box-shadow: 0px 1px 2px 0px #1018280D;
+    font-family: Inter;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: 0%;
+    text-transform: capitalize;
+    color: #27AE60;
+}
+.callus{
+    opacity: 1;
+    border-radius: 8px;
+    border-width: 1px;
+    padding-top: 10px;
+    padding-right: 18px;
+    padding-bottom: 10px;
+    padding-left: 18px;
+    background: linear-gradient(93.77deg, #0ACEFE -6.36%, #2699FB 50.16%);
+    border: 1px solid;
+    border-image-source: linear-gradient(93.77deg, #0ACEFE -6.36%, #2699FB 50.16%);
+    box-shadow: 0px 1px 2px 0px #1018280D;
+    font-family: Inter;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: 0%;
+    color: #FFFFFF;
+}
+.outer_chat img{
+    margin-top: 2px;
+}

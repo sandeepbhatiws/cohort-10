@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Change Image</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+    
+    <div class="max-w-5xl border m-auto">
+        <div class="">
+            <img src="images/1.jpg" class="text-center m-auto" id="mainImage"/>
+        </div>
+
+        <div class="flex">
+            <div>
+                <img src="images/1.jpg" id="image1" onmouseenter="commonChangeImage(this)"/>
+            </div>
+            <div>
+                <img src="images/2.jpg" id="image2" onmouseenter="commonChangeImage(this)"/>
+            </div>
+            <div>
+                <img src="images/3.jpg" id="image3" onmouseout="commonChangeImage(this)"/>
+            </div>
+            <div>
+                <img src="images/4.jpg" id="image4" onmouseleave="commonChangeImage(this)"/>
+            </div>
+            <div>
+                <img src="images/5.jpg" id="image5" onmouseover="commonChangeImage(this)"/>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="js/custom.js"></script>
+</body>
+</html>

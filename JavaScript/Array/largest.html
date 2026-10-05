@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <button onclick="largestValue()">Largest Value</button>
+    <button onclick="smallestValue()">Smallest Value</button>
+    <button onclick="reverseValue()">Reverse Value</button>
+    <button onclick="UniqueValue()">Unique Values</button>
+
+    <script>
+
+        function UniqueValue(){
+            var numbers = [20,25,15,35,25,10,55,45,20,25];
+            var uniqueValues = [];
+
+
+            for(var i of numbers){
+                if(uniqueValues.includes(i)){
+
+                } else {
+                    uniqueValues.push(i)
+                }
+            }
+
+            console.log(uniqueValues)
+
+        }
+
+
+
+        function reverseValue(){
+            var values = [1,2,3,4,5,6,7,8];
+            var reverse = [];
+
+            values.unshift(10, 20);  // starting value add
+            values.shift();  // first value remove
+
+            for(var i of values){
+                //console.log(i)
+
+                reverse.unshift(i)
+            }
+            console.log(reverse);
+        }
+
+
+
+
+        var numbers = [5,6,76,43,56,43,88,23,21,34];
+
+        function smallestValue(){
+            //var numbers = [55,66,76,43,56,43,88,23,21,34];
+
+            var smallest = numbers[0];
+
+            for(var i of numbers){
+                if(i < smallest){
+                    smallest = i;
+                }
+            }
+
+            console.log(smallest);
+        }
+
+
+
+        function largestValue(){
+            var largest = numbers[0];
+
+            for(var i of numbers){
+                if(i > largest){
+                    largest = i;
+                }
+            }
+
+            console.log(largest);
+        }
+    </script>
+</body>
+</html>

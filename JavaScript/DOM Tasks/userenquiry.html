@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Enquiry</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+
+
+    <div class="max-w-4xl m-auto border rounded-2xl px-8 py-4">
+        <form autocomplete="off" id="user-enquiry">
+            <div class="mb-4">
+                <h1 class="text-center font-bold text-2xl">User Enquiry</h1>
+            </div>
+            <div class="mb-4 flex justify-between">
+                <label class="w-[20%]" for="">Name</label>
+                <input type="text" name="name" id="name" class="border rounded-2xl grow w-[80%] ml-5 px-4 py-2"
+                     />
+            </div>
+            <div class="mb-4 flex justify-between">
+                <label class="w-[20%]" for="">Email</label>
+                <input type="text" name="email" id="email" class="border rounded-2xl grow w-[80%] ml-5  px-4 py-2"
+                 />
+            </div>
+            <div class="mb-4 flex justify-between">
+                <label class="w-[20%]" for="">Mobile Number</label>
+                <input type="text" name="mobile_number" id="mobile_number"
+                    class="border rounded-2xl grow w-[80%] ml-5 px-4 py-2" />
+            </div>
+            <div class="text-center">
+                <button
+                    class="bg-black text-white border rounded-2xl px-6 py-2 font-bold cursor-pointer hover:bg-white hover:text-black">Save</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="max-w-4xl m-auto border rounded-2xl px-8 py-4 mt-7">
+        <table class="w-full border-collapse border border-gray-400 bg-white text-sm dark:border-gray-500 dark:bg-gray-800">
+    <thead class="bg-gray-50 dark:bg-gray-700">
+        <tr>
+            <th class="border border-gray-300 p-4 text-left font-semibold text-gray-900 dark:border-gray-600 dark:text-gray-200">S.NO</th>
+            <th class="border border-gray-300 p-4 text-left font-semibold text-gray-900 dark:border-gray-600 dark:text-gray-200">Name</th>
+            <th class="border border-gray-300 p-4 text-left font-semibold text-gray-900 dark:border-gray-600 dark:text-gray-200">Email</th>
+            <th class="border border-gray-300 p-4 text-left font-semibold text-gray-900 dark:border-gray-600 dark:text-gray-200">Mobile Number</th>
+        </tr>
+    </thead>
+    <tbody id="userData">
+        
+    </tbody>
+</table>
+    </div>
+
+
+    <script src="js/custom.js"></script>
+</body>
+
+</html>

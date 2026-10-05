@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+
+    <script>
+
+        var userInfo = [];  //Empty Array
+        var studentInfo = new Array(); // Empty Array
+
+
+        var userInfo = ['Sandeep', 'sandeep@gmail.com', '38'];
+        var studentInfo = new Array(10, 'Rohit', true);
+
+
+        //console.log(userInfo)
+        //console.log(studentInfo)
+        //console.log(userInfo.length);
+
+        //console.log(userInfo[2]);   // Get Value
+        
+        userInfo[2] = 30;   // Update Value
+
+        userInfo[6] = 'Jodhpur'  // Insert
+
+        userInfo[userInfo.length] = 'Rajasthan';
+
+        //console.log(userInfo);
+
+
+        for(var i = 0; i < userInfo.length; i++){
+            //console.log(userInfo[i])
+        }
+
+
+        var numbers = [10];
+
+        numbers.push(20,30, '300');
+
+
+        var remove = numbers.pop();
+
+
+        console.log(remove)
+        console.log(numbers.toString())
+
+        document.write(numbers);
+
+        var name = 'Rahul Kumar';
+
+        console.log(name.length);
+
+
+
+    </script>
+</body>
+</html>

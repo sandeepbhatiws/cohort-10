@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+
+
+    <script>
+        var currentDate = new Date();
+        var newDate = '2026-07-25 00:00:00';
+        var difference = currentDate - new Date(newDate);
+
+        var seconds = difference/1000;
+        var minutes = seconds/60;
+        var hours = minutes/60;
+        var days = hours/24;
+
+        console.log(currentDate)
+        console.log(new Date(newDate))
+
+        console.log('Days -', Math.floor(days))
+        console.log('Hours - ', Math.floor((hours) % 24))
+        console.log('Minutes - ', Math.floor(minutes % 60))
+        console.log('Seconds - ', Math.floor(seconds % 60))
+        
+        // var year = currentDate.getFullYear();
+
+
+
+        // console.log('Current Date - ', currentDate);
+        // console.log('Year - ', currentDate.getFullYear());
+        // console.log('MOnth - ', currentDate.getMonth()+1);
+        // console.log('Date - ', currentDate.getDate());
+
+
+    </script>
+</body>
+</html>

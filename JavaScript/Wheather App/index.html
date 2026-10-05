@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body{
+            font-family:'Poppins',sans-serif;
+            background: linear-gradient(135deg,#4facfe,#00f2fe);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-6">
+
+<div class="w-full max-w-md">
+
+    <div class="backdrop-blur-xl bg-white/20 border border-white/30 rounded-3xl shadow-2xl p-6">
+
+        <!-- Search -->
+        <div class="flex gap-3 mb-6">
+            <input
+                type="text"
+                placeholder="Search city..."
+                id="city"
+                class="flex-1 px-4 py-3 rounded-xl bg-white/30 placeholder-white text-white outline-none focus:ring-2 focus:ring-white"
+            >
+
+            <button class="bg-white text-blue-600 px-5 rounded-xl hover:bg-blue-100 transition" onclick="getWeather()">
+                🔍
+            </button>
+        </div>
+
+        <!-- Weather Icon -->
+        <div class="flex justify-center">
+            <div class="text-8xl">
+                ☀️
+            </div>
+        </div>
+
+        <!-- Temperature -->
+        <div class="text-center mt-4">
+            <h1 class="text-6xl font-bold text-white" id="temperature">
+                28°
+            </h1>
+
+            <p class="text-xl text-white mt-2" id="weather">
+                Sunny
+            </p>
+
+            <h2 class="text-3xl font-semibold text-white mt-2" id="city_name">
+                New York
+            </h2>
+        </div>
+
+        <!-- Details -->
+        <div class="grid grid-cols-2 gap-4 mt-8">
+
+            <div class="bg-white/20 rounded-2xl p-4 text-center">
+                <p class="text-3xl">💧</p>
+                <p class="text-white mt-2 text-sm">
+                    Humidity
+                </p>
+                <h3 class="text-2xl font-bold text-white" id="humidity">
+                    68%
+                </h3>
+            </div>
+
+            <div class="bg-white/20 rounded-2xl p-4 text-center">
+                <p class="text-3xl">💨</p>
+                <p class="text-white mt-2 text-sm">
+                    Wind
+                </p>
+                <h3 class="text-2xl font-bold text-white" id="wind">
+                    12 km/h
+                </h3>
+            </div>
+
+            <div class="bg-white/20 rounded-2xl p-4 text-center">
+                <p class="text-3xl">🌡️</p>
+                <p class="text-white mt-2 text-sm">
+                    Feels Like
+                </p>
+                <h3 class="text-2xl font-bold text-white" id="feels_like">
+                    30°
+                </h3>
+            </div>
+
+            <div class="bg-white/20 rounded-2xl p-4 text-center">
+                <p class="text-3xl">🌅</p>
+                <p class="text-white mt-2 text-sm">
+                    Sunrise
+                </p>
+                <h3 class="text-2xl font-bold text-white" id="sunrise">
+                    6:12 AM
+                </h3>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<script src="js/custom.js"></script>
+</body>
+</html>

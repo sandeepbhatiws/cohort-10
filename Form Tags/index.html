@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Form Tag</title>
+</head>
+<body>
+    
+    <form autocomplete="off">
+        <fieldset>
+            <legend> Contact Info </legend>
+            <div>
+                <label>Name <span>*</span></label>
+                <input name="name" type="text" placeholder="Enter your name" required  pattern="[a-zA-Z 0-9]{3,20}" autocomplete="off">
+            </div>
+            <br>
+
+            <div>
+                <label>Mobile Number <span>*</span></label>
+                <input name="mobile_number" type="text" placeholder="Enter your Mobile Number" required  pattern="[0-9]{8,15}">
+            </div>
+            <br>
+
+            <div>
+                <label>Email</label>
+                <input name="email" type="email" placeholder="Enter your email" required="required" value="sandeep@gmailcom" disabled>
+            </div>
+            <br>
+            
+            <div>
+                <label>Age</label>
+                <input type="number" placeholder="Enter your age" min="18" max="60">
+            </div>
+            <br>
+
+            <div>
+                <label>Password</label>
+                <input type="password" autofocus>
+            </div>
+            <br>
+
+            <div>
+                <label>DOB</label>
+                <input type="date">
+            </div>
+            <br>
+
+            <div>
+                <label>Date & Time</label>
+                <input type="datetime-local">
+            </div>
+            <br>
+
+            <div>
+                <label>Choose Image</label>
+                <input type="file" accept="image/*" multiple>
+            </div>
+            <br>
+
+            <div>
+                <label>Games</label>
+                <input type="checkbox" id="1" checked disabled> <label for="1">Cricket</label>
+                <input type="checkbox" id="2" checked> <label for="2">Football</label>
+                <input type="checkbox" id="3"> <label for="3">Basket Ball</label>
+            </div>
+            <br>
+
+            <div>
+                <label>Gender</label>
+                <input name="gender" type="radio" id="male" checked> <label for="male">Male</label>
+                <input name="gender" type="radio" id="female"> <label for="female">Female</label>
+            </div>
+            <br>
+
+            <div>
+                <label>Select Course</label>
+                <select disabled>
+                    <option>Select Course</option>
+                    <option selected>HTML</option>
+                    <option selected>HTML 5</option>
+                    <option>CSS 3</option>
+                </select>
+            </div>
+
+            <div>
+                <label>Address</label>
+                <textarea rows="10" cols="50"></textarea>
+            </div>        
+
+            <button type="button">Click Me</button>
+            <button type="reset">Reset</button>
+            <button type="submit">Send Message</button>
+        </fieldset>
+    </form>
+
+
+</body>
+</html>

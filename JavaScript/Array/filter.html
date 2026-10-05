@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+
+    <script>
+        var numbers = [5,6,3,7,22,25,76,54,53,75];
+
+        //var data = [];
+
+        //for(var i of numbers){
+        //    if(i % 2 == 0){
+        //        data.push(i)
+        //    }
+        //}
+        //console.log(data);
+
+        var data = numbers.filter((v, i) => {
+            //console.log('Index - ',i)
+            //console.log('Value - ',v)
+            if(v % 2 == 0){
+                return v;
+            }
+        })
+
+        var data = numbers.map((v, i) => {
+            if(v == 25){
+                v = 125;
+                return v;
+            } else {
+                return v;
+            }
+        })
+
+
+        console.log(data);
+
+
+
+
+
+        function getData(name, email){
+            console.log(name)
+            console.log(email)
+        }
+
+        //getData('Sandeep', 'sandeep@gmail.com')
+
+        function getName(){
+            return 'Sandeep Bhati';
+        }
+
+        var name = getName();
+       // console.log(name)
+
+        // Arrow Function
+        var getInfo = (name) => {
+            console.log('Hello')
+            console.log(name)
+        }
+
+        //getInfo('Rohit')
+
+
+    </script>
+</body>
+</html>

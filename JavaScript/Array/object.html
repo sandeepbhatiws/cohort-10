@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <script>
+        var userInfo = {
+            first_name : 'Rohit',
+            last_name : 'Sharma'
+        };
+
+        userInfo.age = 34;
+        userInfo.last_name = 'Kumar'
+
+
+        //console.log(userInfo.first_name)
+
+
+        var userInfos = [
+            {
+                name : 'Rohit',
+                email : 'rohit@gmail.com',
+                age : 45
+            },
+            {
+                email : 'rahul@gmail.com',
+                name : "Rahul",
+                age : 30
+            },
+            {
+                age : 25,
+                email : 'sumit@gmail.com',
+                name : 'Sumit'
+            }
+        ]
+
+        //for(var data of userInfos){
+        //    console.log(data.name)
+        //}
+
+        userInfos.forEach((v, i) => {
+            console.log(v.name)
+        })
+
+
+
+        var numbers = [1,2,7,8];
+        numbers.splice(2,1)
+
+
+        console.log(numbers)
+
+
+    </script>
+</body>
+</html>

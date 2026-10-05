@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="css/style.css" rel="stylesheet"/>
+</head>
+<body>
+    
+    <div class="row">
+        <button onclick="checkEvenNumber()">Even Number</button>
+    
+        <button onclick="checkOddNumber()">Odd Number</button>
+
+        <button onclick="checkEvenOddNumber()">Even / Odd Number</button>
+
+        <button onclick="checkSignal()">Check Signal</button>
+    </div>
+
+    <script>
+        function checkSignal(){
+            var signal = prompt('Enter the value of signal (Ex- Red, Green, Yellow)')
+            signal = signal.toLowerCase();
+
+            if(signal == 'red'){
+                console.log('Red Signal')
+            } else if(signal == 'green'){
+                console.log('Green Signal')
+            } else if(signal == 'yellow'){
+                console.log('Yellow Signal')
+            } else {
+                console.log('Invalid Value');
+            }
+
+            //if(signal == 'red'){
+            //    console.log('Red Signal')
+            //}
+
+            //if(signal == 'green'){
+            //    console.log('Green Signal')
+            //}
+
+            //if(signal == 'yellow'){
+            //    console.log('Yellow Signal')
+            //}
+        }
+
+
+        function checkEvenOddNumber(){
+            var number = prompt('Enter your number to check.')
+
+            if(number % 2 == 0){
+                console.log('Even Number');
+            } else {
+                console.log('Odd Number');
+            }
+        }
+
+        function checkOddNumber(){
+            var number = prompt('Enter your number to check.')
+
+            if(number % 2 != 0){
+                console.log('Odd Number');
+            }
+
+        }
+
+        function checkEvenNumber(){
+            var number = prompt('Enter your number to check.')
+
+            if(number % 2 == 0){
+                console.log('Even Number');
+            }
+        }
+
+
+    </script>
+</body>
+</html>

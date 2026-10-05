@@ -1,0 +1,88 @@
+#row{
+    background-color: black;
+    color: white;
+    font-size: 20px;
+}
+
+.row{
+    text-align: right;
+    text-align: center;
+    text-align: justify;
+
+    text-transform: uppercase;
+    text-transform: lowercase;
+    text-transform: capitalize;
+
+    font-weight: bold;
+}
+
+.row1{
+    word-spacing: 15px;
+    letter-spacing: 5px;
+    line-height: 30px;
+}
+
+.building{
+    width: 600px;
+    height: 500px;
+    border: 1px solid black;
+
+    /* margin-top: 100px;
+    margin-left: 100px;
+    margin-bottom: 100px;
+    margin-right: 100px; */
+
+    /* margin: 50px 70px 80px 100px; */
+
+    margin: auto;
+}
+
+.floor1{
+    width: 600px;
+    padding: 20px;
+    box-sizing: border-box;
+    border: 1px solid black;
+    text-align: center;
+    font-weight: bold;
+    font-size: 40px;
+}
+
+.floor2{
+    width: 600px;
+    height: 50px;
+    border: 1px solid black;
+    display: flex;
+}
+
+.floor2 div{
+    width: 90px;
+    height: 20px;
+    border: 1px solid black;
+    text-align: center;
+    padding: 15px;
+}
+
+/* .floor2 div:first-child{
+    background-color: red;
+    color: white;
+}
+
+.floor2 div:last-child{
+    background-color: red;
+    color: white;
+}
+
+.floor2 div:nth-child(3){
+    background-color: red;
+    color: white;
+}
+
+.floor2 div:nth-last-child(2){
+    background-color: red;
+    color: white;
+} */
+
+.floor2 div:hover{
+    background-color: red;
+    color: white;
+}
