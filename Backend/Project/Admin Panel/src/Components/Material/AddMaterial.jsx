@@ -1,6 +1,42 @@
-import React, { useState } from 'react'
+import axios from 'axios';
+import React, { useEffect, useState } from 'react'
+import iziToast from "izitoast";
+import { useNavigate, useParams } from 'react-router-dom';
 
 export default function AddMaterial() {
+
+  let navigate = useNavigate();
+  let [materialId, setMaterialId] = useState('')
+  let [materialDetails, setMaterialDetails] = useState('');
+
+  let params = useParams();
+
+  useEffect(() => {
+    if (params.id) {
+      setMaterialId(params.id)
+
+      axios.post(`${import.meta.env.VITE_API_URL}material/details/${params.id}`)
+        .then((result) => {
+          if (result.data._status == true) {
+            setMaterialDetails(result.data._data);
+          } else {
+            iziToast.error({
+              title: "Error",
+              message: result.data._message,
+              position: "topRight",
+            });
+          }
+        })
+        .catch((error) => {
+          iziToast.error({
+            title: "Error",
+            message: "Something went wrong !",
+            position: "topRight",
+          });
+        })
+    }
+
+  }, [params])
 
   let [errors, setErrors] = useState([]);
 
@@ -22,22 +58,83 @@ export default function AddMaterial() {
     setErrors(newErrors);
 
     if (newErrors.length === 0) {
-      event.target.reset()
+
+      const data = {
+        name: event.target.name.value,
+        order: event.target.order.value,
+      }
+
+      if (materialId) {
+        axios.put(`${import.meta.env.VITE_API_URL}material/update/${materialId}`, data)
+          .then((result) => {
+            if (result.data._status == true) {
+              iziToast.success({
+                title: "Success",
+                message: result.data._message,
+                position: "topRight",
+              });
+
+              navigate('/material/view');
+              event.target.reset()
+            } else {
+              iziToast.error({
+                title: "Error",
+                message: result.data._message,
+                position: "topRight",
+              });
+            }
+          })
+          .catch((error) => {
+            iziToast.error({
+              title: "Error",
+              message: "Something went wrong !",
+              position: "topRight",
+            });
+          })
+      } else {
+        axios.post(`${import.meta.env.VITE_API_URL}material/create`, data)
+          .then((result) => {
+
+            if (result.data._status == true) {
+              iziToast.success({
+                title: "Success",
+                message: result.data._message,
+                position: "topRight",
+              });
+
+              navigate('/material/view');
+
+              event.target.reset()
+
+            } else {
+              iziToast.error({
+                title: "Error",
+                message: result.data._message,
+                position: "topRight",
+              });
+            }
+          })
+          .catch((error) => {
+            console.log(error)
+            iziToast.error({
+              title: "Error",
+              message: "Something went wrong !",
+              position: "topRight",
+            });
+          })
+      }
+
     }
   };
-
 
   let ErrorHandler = (event) => {
     let fieldName = event.target.name;
 
     if (event.target.value === "") {
-
       if (!errors.includes(fieldName)) {
         setErrors([...errors, fieldName]);
       }
-
     } else {
-
       let updated = errors.filter((v) => v !== fieldName);
       setErrors(updated);
     }
@@ -70,7 +167,13 @@ export default function AddMaterial() {
 
             <li aria-current="page">
               <span className="text-md font-semibold text-gray-900">
-                Add Material
+                {
+                  materialId
+                    ?
+                    'Update Material'
+                    :
+                    'Add Material'
+                }
               </span>
             </li>
           </ol>
@@ -83,7 +186,13 @@ export default function AddMaterial() {
             <h3 className="text-[24px] font-semibold 
             bg-gradient-to-r from-indigo-600 to-indigo-500
             py-3 px-5 rounded-t-lg text-white border border-indigo-500">
-              Add New Material
+              {
+                materialId
+                  ?
+                  'Update Material'
+                  :
+                  'Add Material'
+              }
             </h3>
 
             <form onSubmit={formhandler} className="border border-slate-200 border-t-0 bg-white p-6 rounded-b-lg shadow-sm">
@@ -97,6 +206,7 @@ export default function AddMaterial() {
                 <input
                   type="text"
                   name="name"
+                  defaultValue={materialDetails.name}
                   autoComplete="off"
                   onKeyUp={ErrorHandler}
                   className="text-[17px] border border-slate-300 text-gray-900 rounded-lg 
@@ -112,7 +222,6 @@ export default function AddMaterial() {
                 )}
               </div>
 
-
               {/* Order */}
               <div className="mb-6">
                 <label className="block mb-2 text-md font-medium text-gray-700">
@@ -123,12 +232,20 @@ export default function AddMaterial() {
                   type="number"
                   name="order"
                   min={1}
+                  defaultValue={materialDetails.order}
+                  onKeyUp={ErrorHandler}
                   autoComplete='off'
                   className="text-[17px] border border-slate-300 text-gray-900 rounded-lg 
                   focus:ring-2 focus:ring-indigo-400 focus:border-indigo-500 
                   block w-full py-2.5 px-3"
                   placeholder="Enter order number"
                 />
+
+                {errors.includes("order") && (
+                  <p className="text-red-600 text-sm mt-1">
+                    Order is required
+                  </p>
+                )}
               </div>
 
               <button
@@ -138,7 +255,13 @@ export default function AddMaterial() {
                 focus:ring-4 focus:ring-indigo-300
                 font-medium rounded-lg text-md px-6 py-2.5 shadow-sm transition-all"
               >
-                Submit
+                {
+                  materialId
+                    ?
+                    'Update'
+                    :
+                    'Submit'
+                }
               </button>
 
             </form>

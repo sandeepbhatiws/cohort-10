@@ -4,19 +4,29 @@ import { MdOutlineClose } from "react-icons/md";
 import { Link } from "react-router-dom";
 import iziToast from "izitoast";
 import axios from 'axios';
+import ResponsivePagination from 'react-responsive-pagination';
+import 'react-responsive-pagination/themes/classic-light-dark.css';
 
 export default function ViewMaterial() {
 
+  const [filterData, setFilterData] = useState({})
   const [materials, setMaterials] = useState([]);
 
-  useEffect(() => {
-    axios.post(`${import.meta.env.VITE_API_URL}material/view`)
-      .then((result) => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
 
+  useEffect(() => {
+    axios.post(`${import.meta.env.VITE_API_URL}material/view`, {
+      name : filterData.name,
+      limit : 4,
+      page : currentPage
+    })
+      .then((result) => {
         if (result.data._status == true) {
           setMaterials(result.data._data);
-          console.log(result.data._data)
+          setTotalPages(result.data._paginate.total_pages)
         } else {
+          setMaterials([])
           iziToast.error({
             title: "Error",
             message: result.data._message,
@@ -31,13 +41,12 @@ export default function ViewMaterial() {
           position: "topRight",
         });
       })
-  }, []);
+  }, [filterData, currentPage]);
 
 
 
 
   const [openFilter, setOpenFilter] = useState(false);
-  const [filterData, setFilterData] = useState({})
   const [selectedRecord, setSelectedRecord] = useState([])
 
   const applyFilter = (e) => {
@@ -48,12 +57,6 @@ export default function ViewMaterial() {
     };
 
     setFilterData(obj);
-
-    iziToast.success({
-      title: "Filter Applied",
-      message: "Material filter applied successfully.",
-      position: "topRight",
-    });
   };
 
 
@@ -145,16 +148,28 @@ export default function ViewMaterial() {
   const SingleCheckSelect = (id) => {
 
     if (selectedRecord.includes(id)) {
-
       let finalData = selectedRecord.filter((v) => v !== id)
-
       setSelectedRecord(finalData)
-
     } else {
-
       let finalData = [...selectedRecord, id]
-
       setSelectedRecord(finalData)
+    }
+  }
+
+  const multipleSelectCheckBox = () => {
+    
+    if(selectedRecord.length == materials.length){
+      setSelectedRecord([]);
+    } else {
+      setSelectedRecord([]);
+
+      var checked = [];
+
+      materials.forEach((v) => {
+        checked.push(v._id);
+      })
+
+      setSelectedRecord([...checked]);
 
     }
 
@@ -323,6 +338,8 @@ export default function ViewMaterial() {
                     <th className="px-2 w-[100px] py-3">
                       <input
                         type="checkbox"
+                        onClick={ multipleSelectCheckBox }
+                        checked={ selectedRecord.length == materials.length ? 'checked' : '' }
                         className="mr-2 w-4 h-4 cursor-pointer text-indigo-600 bg-gray-100 border-gray-300 rounded focus:ring-indigo-500"
                       />
                       Select
@@ -346,8 +363,9 @@ export default function ViewMaterial() {
                             <td className="px-2 py-4">
                               <input
                                 type="checkbox"
+                                checked={ selectedRecord.includes(v._id) ? 'checked' : '' }
                                 className="w-4 h-4 text-indigo-600 cursor-pointer"
-                                onClick={() => SingleCheckSelect(1)}
+                                onClick={() => SingleCheckSelect(v._id)}
                               />
                             </td>
 
@@ -374,7 +392,7 @@ export default function ViewMaterial() {
 
                             <td className="px-2 py-4">
 
-                              <Link>
+                              <Link to={`/material/edit/${v._id}`}>
                                 <svg fill="gold" className="w-5 h-5" viewBox="0 0 512 512">
                                   <path d="M471.6 21.7c-21.9-21.9-57.3-21.9-79.2 0L362.3 51.7l97.9 97.9 30.1-30.1c21.9-21.9 21.9-57.3 0-79.2L471.6 21.7zm-299.2 220c-6.1 6.1-10.8 13.6-13.5 21.9l-29.6 88.8c-2.9 8.6-.6 18.1 5.8 24.6s15.9 8.7 24.6 5.8l88.8-29.6c8.2-2.7 15.7-7.4 21.9-13.5L437.7 172.3 339.7 74.3 172.4 241.7z"></path>
                                 </svg>
@@ -398,6 +416,14 @@ export default function ViewMaterial() {
 
               </table>
 
+            </div>
+
+            <div className='py-6'>
+              <ResponsivePagination
+                current={currentPage}
+                total={totalPages}
+                onPageChange={setCurrentPage}
+              />
             </div>
 
           </div>

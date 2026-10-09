@@ -20,9 +20,8 @@ server.get('/', (request, response) => {
 require('./src/routes/admin/color.routes.js')(server)
 require('./src/routes/admin/material.routes.js')(server)
 
-
 // Website
-
+require('./src/routes/website/user.routes.js')(server)
 
 // Application
 
