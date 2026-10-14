@@ -19,6 +19,7 @@ server.get('/', (request, response) => {
 // Admin Panel
 require('./src/routes/admin/color.routes.js')(server)
 require('./src/routes/admin/material.routes.js')(server)
+require('./src/routes/admin/user.routes.js')(server)
 
 // Website
 require('./src/routes/website/user.routes.js')(server)

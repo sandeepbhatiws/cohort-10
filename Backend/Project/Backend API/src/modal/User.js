@@ -26,6 +26,12 @@ var Schema = new mongoose.Schema({
         type: String,
         required: [true, 'Password is required'],
     },
+    role_type : {
+        type : String,
+        default : 'user',
+        required : ['true', 'Role Type is required'],
+        enum : ['user', 'admin']
+    },
     status: {
         type: Boolean,
         default: true

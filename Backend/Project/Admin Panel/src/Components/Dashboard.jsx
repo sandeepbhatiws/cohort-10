@@ -1,6 +1,8 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import { GlobalContext } from './ContextAPI';
 
 export default function Dashboard() {
+
     return (
         <>
             {/* Page Background Theme */}

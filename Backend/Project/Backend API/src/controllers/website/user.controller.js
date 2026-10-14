@@ -55,7 +55,7 @@ exports.register = async(request, response) => {
 
 exports.login = async(request, response) => {
 
-    var checkUser = await UserModal.findOne({ email  : request.body.email });
+    var checkUser = await UserModal.findOne({ email  : request.body.email, role_type : 'user' });
 
     if(!checkUser){
         const data = {
