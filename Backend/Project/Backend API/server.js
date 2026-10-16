@@ -2,12 +2,15 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongoose = require('mongoose');
+require('dotenv').config()
 
 // Make Executable Function
 const server = express();
 
 server.use(express.json())
 server.use(express.urlencoded({ extended : true }))
+
+console.log(process.env.server_key)
 
 server.use(bodyParser.json());
 server.use(cors());

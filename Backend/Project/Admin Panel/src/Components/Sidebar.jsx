@@ -9,6 +9,7 @@ import { MdCategory } from "react-icons/md";
 import { FaQuoteLeft } from "react-icons/fa";
 import { LuPackage } from "react-icons/lu";
 import { LuShieldCheck } from "react-icons/lu";
+import { FaUserCircle } from "react-icons/fa";
 export default function Sidebar() {
   let [openBlock, setOpenBlock] = useState(null)
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -260,6 +261,36 @@ export default function Sidebar() {
             )}
           </li>
 
+        </ul>
+
+        <hr className="my-5 border-slate-700" />
+
+        {/* ACCOUNT */}
+        <ul className="space-y-2">
+          <li>
+            <button
+              onClick={()=>openMenu("profile")}
+              className="flex w-full items-center gap-3 p-2 rounded-lg hover:bg-slate-800 transition"
+              id="profile"
+            >
+              <FaUserCircle size={20} />
+              <span className="font-medium">Profile</span>
+            </button>
+
+            {openBlock == "profile" && (
+              <div className="ml-8 mt-2 space-y-1 text-sm">
+                <Link to="/profile" className="block px-3 py-2 rounded-md hover:bg-slate-800">
+                  My Profile
+                </Link>
+                <Link to="/profile/update" className="block px-3 py-2 rounded-md hover:bg-slate-800">
+                  Update Profile
+                </Link>
+                <Link to="/profile/change-password" className="block px-3 py-2 rounded-md hover:bg-slate-800">
+                  Change Password
+                </Link>
+              </div>
+            )}
+          </li>
         </ul>
       </div>
     </>

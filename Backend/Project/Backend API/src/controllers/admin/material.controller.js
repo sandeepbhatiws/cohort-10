@@ -1,8 +1,34 @@
 const MaterialModal = require('../../modal/Material.js');
+var slugify = require('slugify')
+
+const generateUniqueSlug = async (Model, baseSlug) => {
+  let slug = baseSlug;
+  let count = 0;
+
+  // Loop to find unique slug
+  while (await Model.findOne({ slug })) {
+    count++;
+    slug = `${baseSlug}-${count}`;
+  }
+
+  return slug;
+};
 
 exports.create = async(request, response) => {
 
-    MaterialModal(request.body)
+    var dataSave = request.body;
+
+    if(request.body.name){
+        var slug = slugify(request.body.name, {
+            lower: true,      // convert to lower case, defaults to `false`
+            strict: true,     // strip special characters except replacement, defaults to `false`
+        })
+
+        dataSave.slug = await generateUniqueSlug(MaterialModal, slug);
+    }
+
+
+    MaterialModal(dataSave)
     .save()
     .then((result) => {
         const data = {

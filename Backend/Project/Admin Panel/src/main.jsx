@@ -22,6 +22,9 @@ import AddTestimonial from './Components/Testimonial/AddTestimonial'
 import ViewTestimonial from './Components/Testimonial/ViewTestimonial'
 import AddWhyChooseUs from './Components/WhyChooseUs/AddWhyChooseUs'
 import ViewWhyChooseUs from './Components/WhyChooseUs/ViewWhyChooseUs'
+import ViewProfile from './Components/Profile/ViewProfile'
+import UpdateProfile from './Components/Profile/UpdateProfile'
+import ChangePassword from './Components/Profile/ChangePassword'
 
 createRoot(document.getElementById('root')).render(
 
@@ -63,6 +66,11 @@ createRoot(document.getElementById('root')).render(
         <Route path='why-choose-us'>
           <Route path='add' element={<AddWhyChooseUs />} />
           <Route path='view' element={<ViewWhyChooseUs />} />
+        </Route>
+        <Route path='profile'>
+          <Route index element={<ViewProfile />} />
+          <Route path='update' element={<UpdateProfile />} />
+          <Route path='change-password' element={<ChangePassword />} />
         </Route>
 
       </Route>

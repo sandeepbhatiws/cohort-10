@@ -10,7 +10,12 @@ export default function ContextAPI({children}) {
 
     const [isLogin, setIsLogin] = useState(getToken ?? '');
 
-    const data = {isLogin, setIsLogin}
+    const logout = () => {
+        localStorage.removeItem('user_token');
+        setIsLogin('');
+    }
+
+    const data = {isLogin, setIsLogin, logout}
 
   return (
     <GlobalContext.Provider value={ data }>
