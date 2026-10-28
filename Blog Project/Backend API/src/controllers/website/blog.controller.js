@@ -24,13 +24,17 @@ exports.view = async(request, response) => {
             condition.category = body.category;
         }
 
+        if(body.id){
+            condition._id = { $nin : body.id };
+        }
+
         // published can be true / false, empty means all
         condition.published = true;
 
         var totalRecords = await BlogModal.countDocuments(condition);
 
         var result = await BlogModal.find(condition)
-        .select('category title slug username published date total_comments total_likes status')
+        .select('category title slug short_description username published date total_comments total_likes status')
         .populate('category', 'name')
         // .populate('category')
         .sort({
@@ -67,6 +71,7 @@ exports.view = async(request, response) => {
             return response.send(data);
         }
     } catch (error) {
+        console.log(error)
         const data = {
             _status : false,
             _message : "Something went wrong.",
@@ -81,9 +86,9 @@ exports.details = async(request, response) => {
 
     try {
         var result = await BlogModal.findOne({
-            _id : request.params.id,
+            slug : request.params.slug,
             deleted_at : null
-        });
+        }).populate('category');
 
         if(result){
             const data = {

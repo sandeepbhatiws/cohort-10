@@ -261,7 +261,7 @@ export default function HomePage() {
                     {
                       blogs.map((item, i) => {
                         return(
-                          <BlogCard/>
+                          <BlogCard blogItem={item} key={i}/>
                         )
                       })
                     }

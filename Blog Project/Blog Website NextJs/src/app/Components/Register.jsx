@@ -1,7 +1,40 @@
+'use client'
+import axios from 'axios';
 import Link from 'next/link'
 import React from 'react'
+import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
+import { loginRegister } from '../Redux Toolkit/loginSlice';
+import { useRouter } from 'next/navigation';
 
 export default function Register() {
+
+    const dispatch = useDispatch();
+    const route = useRouter();
+
+    const loginHandler = (event) => {
+        event.preventDefault();
+
+        axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}user/register`, {
+            name : event.target.name.value,
+            email : event.target.email.value,
+            password : event.target.password.value,
+        })
+        .then((result) => {
+            if(result.data._status){
+                toast.success(result.data._message);
+                dispatch(loginRegister(result.data._token))
+                route.push('/profile')
+            } else {
+                toast.error(result.data._message);
+            }
+        })
+        .catch(() => {
+            toast.error('Something went wrong!');
+        })
+    }
+
+
     return (
         <>
             <main className="grid min-h-screen lg:grid-cols-2">
@@ -28,7 +61,7 @@ export default function Register() {
                         <p className="mt-2 text-slate-600">Join 85,000+ developers. Read, write and grow with the community &mdash; it's free.</p>
 
                         {/* Register form (visual only - no validation or data storage) */}
-                        <form action="#" className="mt-10 space-y-5">
+                        <form onSubmit={loginHandler} className="mt-10 space-y-5">
                             {/* Full name */}
                             <div>
                                 <label htmlFor="full-name" className="block text-sm font-medium text-slate-700">Full name</label>
@@ -36,7 +69,7 @@ export default function Register() {
                                     <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">
                                         <svg className="size-5" fill="none" viewBox="0 0 24 24" strokeWidth="1.75" stroke="currentColor" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"/></svg>
                                     </span>
-                                    <input id="full-name" name="fullName" type="text" autoComplete="name" placeholder="Jane Doe" className="block w-full rounded-xl border border-slate-300 bg-white py-3 pl-12 pr-4 text-slate-900 shadow-sm placeholder:text-slate-400 transition focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-100"/>
+                                    <input id="full-name" name="name" type="text" autoComplete="name" placeholder="Jane Doe" className="block w-full rounded-xl border border-slate-300 bg-white py-3 pl-12 pr-4 text-slate-900 shadow-sm placeholder:text-slate-400 transition focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-100"/>
                                 </div>
                             </div>
 
@@ -64,7 +97,7 @@ export default function Register() {
                             </div>
 
                             {/* Confirm password */}
-                            <div>
+                            {/* <div>
                                 <label htmlFor="confirm-password" className="block text-sm font-medium text-slate-700">Confirm password</label>
                                 <div className="relative mt-2">
                                     <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">
@@ -72,7 +105,7 @@ export default function Register() {
                                     </span>
                                     <input id="confirm-password" name="confirmPassword" type="password" autoComplete="new-password" placeholder="Re-enter your password" className="block w-full rounded-xl border border-slate-300 bg-white py-3 pl-12 pr-4 text-slate-900 shadow-sm placeholder:text-slate-400 transition focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-100"/>
                                 </div>
-                            </div>
+                            </div> */}
 
                             {/* Terms and conditions */}
                             <div className="flex items-start gap-3 pt-1">
@@ -83,7 +116,7 @@ export default function Register() {
                             </div>
 
                             {/* Register button */}
-                            <button type="button" className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-3.5 font-semibold text-white shadow-lg shadow-indigo-600/25 transition hover:bg-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                            <button type="submit" className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-3.5 font-semibold text-white shadow-lg shadow-indigo-600/25 transition hover:bg-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
                                 Register
                                 <svg className="size-5" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"/></svg>
                             </button>

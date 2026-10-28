@@ -1,11 +1,30 @@
 'use client'
 import Link from 'next/link'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import BlogCard from './Common/BlogCard'
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 export default function Blog() {
 
-    const [blogs, setBlogs] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12])
+    var [blogs, setBlogs] = useState([]);
+
+    useEffect(() => {
+        axios.post('http://localhost:5000/api/website/blog/view', {
+            limit: 18
+        })
+            .then((result) => {
+                if (result.data._status) {
+                    setBlogs(result.data._data)
+                } else {
+                    setBlogs([])
+                    toast.error(result.data._message)
+                }
+            })
+            .catch((error) => {
+                toast.error('Something went wrong !!')
+            })
+    }, []);
 
     return (
         <>
@@ -96,13 +115,12 @@ export default function Blog() {
 
                                     {/* Blog Card */}
                                     {
-                                        blogs.map(() => {
-                                            return(
-                                                <BlogCard />
+                                        blogs.map((item, i) => {
+                                            return (
+                                                <BlogCard blogItem={item} key={i} />
                                             )
                                         })
                                     }
-                                    
 
                                 </div>
 

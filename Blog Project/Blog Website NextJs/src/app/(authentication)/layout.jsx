@@ -1,4 +1,5 @@
 import "../assets/css/style.css"
+import Authenticationlayout from "../Components/Common/Authenticationlayout";
 
 export const metadata = {
   title: "Next Js Application",
@@ -9,7 +10,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className="bg-white font-sans text-slate-900 antialiased">
-            {children}
+            <Authenticationlayout>
+              {children}
+            </Authenticationlayout>
       </body>
     </html>
   );

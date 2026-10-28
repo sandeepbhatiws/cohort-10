@@ -1,7 +1,25 @@
+import { logout } from '@/app/Redux Toolkit/loginSlice'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { toast } from 'react-toastify'
 
 export default function Header() {
+
+  const isLogin = useSelector((state) => {
+    return state.login.isLogin
+  })
+
+  const dispatch = useDispatch()
+  const router = useRouter();
+
+  const logoutUser = () => {
+    dispatch(logout())
+    toast.success('Logout Successfully')
+    router.push('/')
+  }
+
   return (
     <>
       {/* ========== NAVBAR (reusable component) ========== */}
@@ -25,8 +43,21 @@ export default function Header() {
 
           {/* Desktop actions */}
           <div className="hidden items-center gap-2 md:flex">
-            <Link href="/login" className="rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-100 hover:text-slate-900">Log in</Link>
-            <Link href="/register" className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Get Started</Link>
+            {
+              isLogin != 0
+              ?
+                <>
+                  <Link href="/profile" className="rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-100 hover:text-slate-900">My Profile</Link>
+                  <a onClick={logoutUser}  className="rounded-lg bg-indigo-600 cursor-pointer px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Logout</a>
+                </>
+              :
+              <>
+                <Link href="/login" className="rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-100 hover:text-slate-900">Log in</Link>
+                <Link href="/register" className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Get Started</Link>
+              </>
+
+            }
+            
           </div>
 
           {/* Mobile menu: <details> opens and closes without any JavaScript */}
