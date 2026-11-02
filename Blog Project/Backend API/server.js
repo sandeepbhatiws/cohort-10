@@ -19,6 +19,8 @@ server.get('/', (request, response) => {
     response.end('Server is working fine !!');
 })
 
+server.use('/uploads', express.static('uploads'));
+
 // Admin Panel
 require('./src/routes/admin/color.routes.js')(server)
 require('./src/routes/admin/material.routes.js')(server)
@@ -29,6 +31,8 @@ require('./src/routes/admin/blog.routes.js')(server)
 // Website
 require('./src/routes/website/user.routes.js')(server)
 require('./src/routes/website/blog.routes.js')(server)
+require('./src/routes/website/blogLike.routes.js')(server)
+require('./src/routes/website/blogComment.routes.js')(server)
 
 // Application
 

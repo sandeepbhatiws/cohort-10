@@ -46,6 +46,10 @@ exports.create = async(request, response) => {
             dataSave.slug = await generateUniqueSlug(BlogModal, body.title);
         }
 
+        if(request.file){
+            dataSave.image = request.file.filename;
+        }
+
         var result = await BlogModal(dataSave).save();
 
         const data = {
@@ -97,7 +101,7 @@ exports.view = async(request, response) => {
         var totalRecords = await BlogModal.countDocuments(condition);
 
         var result = await BlogModal.find(condition)
-        .select('category title slug username published date total_comments total_likes status')
+        .select('category title image slug username published date total_comments total_likes status')
         .populate('category', 'name slug')
         .sort({
             date : 'desc',
@@ -117,6 +121,7 @@ exports.view = async(request, response) => {
             const data = {
                 _status : true,
                 _message : "Record Found.",
+                _image_url : process.env.blog_image,
                 _paginate : paginate,
                 _data : result
             }

@@ -23,6 +23,7 @@ export default function ViewBlog() {
   const [categories, setCategories] = useState([]);
   // Only for the first load, later loads keep the old rows until the new ones arrive
   const [loading, setLoading] = useState(true);
+  const [imageURL, SetImageURL] = useState('');
 
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
@@ -77,6 +78,7 @@ export default function ViewBlog() {
 
         if (result.data._status == true) {
           setBlogs(result.data._data);
+          SetImageURL(result.data._image_url)
         } else {
           setBlogs([]);
 
@@ -440,6 +442,7 @@ export default function ViewBlog() {
                       Select
                     </th>
                     <th className="px-2 py-3 min-w-[220px]">Title</th>
+                    <th className="px-2 py-3">Image</th>
                     <th className="px-2 py-3">Category</th>
                     <th className="px-2 py-3">Username</th>
                     <th className="px-2 py-3">Published</th>
@@ -479,6 +482,15 @@ export default function ViewBlog() {
                               <td className="px-2 py-4">
                                 <p className="font-medium text-gray-900">{v.title}</p>
                                 <p className="text-sm text-gray-500">{v.slug}</p>
+                              </td>
+                              <td className="px-2 py-4">
+                                {
+                                  v.image 
+                                  ?
+                                  <img width="100px" height="100px" src={`${imageURL}${v.image}`}/>
+                                  :
+                                  'No preview available'
+                                }
                               </td>
 
                               <td className="px-2 py-4">

@@ -3,7 +3,7 @@ import axios from 'axios';
 import Link from 'next/link'
 import React from 'react'
 import { useDispatch } from 'react-redux';
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import { loginRegister } from '../Redux Toolkit/loginSlice';
 import { useRouter } from 'next/navigation';
 
@@ -37,6 +37,7 @@ export default function Register() {
 
     return (
         <>
+            <ToastContainer/>
             <main className="grid min-h-screen lg:grid-cols-2">
 
                 {/* ========== LEFT: REGISTER FORM ========== */}

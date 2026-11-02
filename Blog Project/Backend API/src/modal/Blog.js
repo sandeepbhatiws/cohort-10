@@ -13,6 +13,10 @@ var Schema = new mongoose.Schema({
         minLength: [3, 'Title should be at least 3 characters.'],
         maxLength: [200, 'Title should not be more than 200 characters.']
     },
+    image: {
+        type: String,
+        required: true,
+    },
     slug: {
         type: String,
         required: true,

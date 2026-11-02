@@ -2,16 +2,40 @@
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import BlogCard from './Common/BlogCard'
+import BlogComments from './Common/BlogComments'
 import { useParams } from 'next/navigation';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../Redux Toolkit/loginSlice';
 
 export default function BlogDetails() {
 
     const [blogs, setBlogs] = useState([]);
     const [blogDetails, setBlogDetails] = useState('')
+    const [isLiked, setIsLiked] = useState(false);
+    const [totalLikes, setTotalLikes] = useState(0);
+    const [totalComments, setTotalComments] = useState(0);
+    const [liking, setLiking] = useState(false);
 
     const params = useParams();
+    const dispatch = useDispatch();
+
+    const isLogin = useSelector((state) => {
+        return state.login.isLogin
+    })
+
+    const authHeader = { headers : { Authorization : `Bearer ${isLogin}` } };
+
+    const errorHandler = (error) => {
+        // 401 -> saved token is no longer valid, so the user has to login again
+        if (error.response?.status == 401) {
+            dispatch(logout())
+            toast.error('Please login again.', { toastId : 'login-again' })
+        } else {
+            toast.error('Something went wrong !!')
+        }
+    }
 
     useEffect(() => {
         if(params.slug){
@@ -19,6 +43,7 @@ export default function BlogDetails() {
             .then((result) => {
                 if (result.data._status) {
                     setBlogDetails(result.data._data)
+                    setTotalLikes(result.data._data.total_likes)
                 } else {
                     setBlogDetails('')
                     toast.error(result.data._message)
@@ -49,9 +74,48 @@ export default function BlogDetails() {
                 toast.error('Something went wrong !!')
             })
         } else {
-            setBlogs([]);   
+            setBlogs([]);
         }
     }, [blogDetails]);
+
+    useEffect(() => {
+        if(blogDetails && isLogin != 0){
+            axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}blog-like/status/${blogDetails._id}`, {}, authHeader)
+            .then((result) => {
+                if (result.data._status) {
+                    setIsLiked(result.data._data.is_liked)
+                }
+            })
+            .catch(errorHandler)
+        } else {
+            setIsLiked(false)
+        }
+    }, [blogDetails, isLogin]);
+
+    const likeHandler = () => {
+        if(!blogDetails){
+            return;
+        }
+
+        if(isLogin == 0){
+            toast.error('Please login to like this blog.')
+            return;
+        }
+
+        setLiking(true);
+
+        axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}blog-like/toggle/${blogDetails._id}`, {}, authHeader)
+        .then((result) => {
+            if (result.data._status) {
+                setIsLiked(result.data._data.is_liked)
+                setTotalLikes(result.data._data.total_likes)
+            } else {
+                toast.error(result.data._message)
+            }
+        })
+        .catch(errorHandler)
+        .finally(() => setLiking(false))
+    }
 
 
     return (
@@ -319,19 +383,19 @@ function UserList() {
                                     <Link href="/blog" className="rounded-full bg-slate-100 px-3 py-1 text-sm font-medium text-slate-700 transition hover:bg-indigo-50 hover:text-indigo-700">#webdev</Link>
                                 </div>
 
-                                {/* Reactions bar (visual only) */}
+                                {/* Reactions bar */}
                                 <div className="mt-8 flex max-w-3xl flex-wrap items-center justify-between gap-4 rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:p-5">
                                     <div className="flex flex-wrap items-center gap-3">
                                         {/* Like button */}
-                                        <button type="button" aria-pressed="false" className="group inline-flex cursor-pointer items-center gap-2 rounded-full border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-rose-200 hover:bg-rose-50 hover:text-rose-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-500">
-                                            <svg className="size-5 transition group-hover:scale-110" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" /></svg>
-                                            Like
-                                            <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-semibold text-slate-600 transition group-hover:bg-rose-100 group-hover:text-rose-600">248</span>
+                                        <button type="button" onClick={likeHandler} disabled={liking} aria-pressed={isLiked} className={`group inline-flex cursor-pointer items-center gap-2 rounded-full border px-5 py-2.5 text-sm font-semibold shadow-sm transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-500 disabled:cursor-wait disabled:opacity-70 ${isLiked ? 'border-rose-200 bg-rose-50 text-rose-600 hover:bg-rose-100' : 'border-slate-200 bg-white text-slate-700 hover:border-rose-200 hover:bg-rose-50 hover:text-rose-600'}`}>
+                                            <svg className="size-5 transition group-hover:scale-110" fill={isLiked ? 'currentColor' : 'none'} viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" /></svg>
+                                            {isLiked ? 'Unlike' : 'Like'}
+                                            <span className={`rounded-full px-2 py-0.5 text-xs font-semibold transition ${isLiked ? 'bg-rose-100 text-rose-600' : 'bg-slate-100 text-slate-600 group-hover:bg-rose-100 group-hover:text-rose-600'}`}>{totalLikes}</span>
                                         </button>
                                         {/* Jump to comments */}
                                         <a href="#comments" className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-indigo-200 hover:bg-indigo-50 hover:text-indigo-700">
                                             <svg className="size-5" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 0 1-.923 1.785A5.969 5.969 0 0 0 6 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337Z" /></svg>
-                                            32 Comments
+                                            {totalComments} {totalComments == 1 ? 'Comment' : 'Comments'}
                                         </a>
                                     </div>
 
@@ -371,157 +435,10 @@ function UserList() {
                                 Back to Blogs
                             </Link>
 
-                            {/* ========== COMMENTS ========== */}
-                            <section id="comments" className="mt-12 max-w-3xl scroll-mt-24 border-t border-slate-200 pt-12" aria-labelledby="comments-heading">
-                                <h2 id="comments-heading" className="text-2xl font-bold text-slate-900">Comments <span className="font-medium text-slate-400">(32)</span></h2>
-
-                                {/* Comment form (visual only - does not submit anywhere) */}
-                                <form action="#" className="mt-8 rounded-2xl border border-slate-200 bg-slate-50 p-5 sm:p-6">
-                                    <h3 className="text-lg font-semibold text-slate-900">Leave a comment</h3>
-                                    <p className="mt-1 text-sm text-slate-500">Your email address will not be published.</p>
-
-                                    <div className="mt-6 grid gap-5 sm:grid-cols-2">
-                                        <div>
-                                            <label htmlFor="comment-name" className="block text-sm font-medium text-slate-700">Name</label>
-                                            <input id="comment-name" name="name" type="text" autoComplete="name" placeholder="Jane Doe" className="mt-2 block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 shadow-sm placeholder:text-slate-400 transition focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-100" />
-                                        </div>
-                                        <div>
-                                            <label htmlFor="comment-email" className="block text-sm font-medium text-slate-700">Email</label>
-                                            <input id="comment-email" name="email" type="email" autoComplete="email" placeholder="jane@example.com" className="mt-2 block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 shadow-sm placeholder:text-slate-400 transition focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-100" />
-                                        </div>
-                                        <div className="sm:col-span-2">
-                                            <label htmlFor="comment-message" className="block text-sm font-medium text-slate-700">Comment</label>
-                                            <textarea id="comment-message" name="message" rows="5" placeholder="Share your thoughts..." className="mt-2 block w-full resize-y rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 shadow-sm placeholder:text-slate-400 transition focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-100"></textarea>
-                                        </div>
-                                    </div>
-
-                                    <div className="mt-6 flex flex-col-reverse gap-4 sm:flex-row sm:items-center sm:justify-between">
-                                        <p className="text-xs text-slate-500">Please keep comments respectful and on topic.</p>
-                                        <button type="button" className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-xl bg-indigo-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-                                            <svg className="size-4" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" /></svg>
-                                            Post Comment
-                                        </button>
-                                    </div>
-                                </form>
-
-                                {/* Comment list */}
-                                <ul className="mt-10 space-y-8">
-
-                                    {/* Comment */}
-                                    <li>
-                                        <article className="flex gap-4">
-                                            <img src="https://randomuser.me/api/portraits/women/26.jpg" alt="Ishita Verma" className="size-11 shrink-0 rounded-full object-cover" />
-                                            <div className="min-w-0 flex-1">
-                                                <div className="rounded-2xl rounded-tl-sm bg-slate-50 p-5 ring-1 ring-slate-100">
-                                                    <div className="flex flex-wrap items-center justify-between gap-2">
-                                                        <h3 className="font-semibold text-slate-900">Ishita Verma</h3>
-                                                        <time dateTime="2026-10-19" className="text-xs text-slate-500">Oct 19, 2026</time>
-                                                    </div>
-                                                    <p className="mt-2 text-[15px] leading-7 text-slate-700">This is the clearest explanation of the dependency array I've read. The three-case breakdown finally made it click for me. Bookmarking this for my whole team!</p>
-                                                </div>
-                                                <div className="mt-2 flex items-center gap-5 pl-2 text-sm">
-                                                    {/* Liked state example: filled heart + "Unlike" */}
-                                                    <button type="button" aria-pressed="true" className="inline-flex cursor-pointer items-center gap-1.5 font-medium text-rose-600 transition hover:text-rose-700">
-                                                        <svg className="size-4" fill="currentColor" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" /></svg>
-                                                        Unlike <span className="text-rose-400">&middot; 25</span>
-                                                    </button>
-                                                    <button type="button" className="inline-flex cursor-pointer items-center gap-1.5 font-medium text-slate-500 transition hover:text-indigo-600">
-                                                        <svg className="size-4" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" /></svg>
-                                                        Reply
-                                                    </button>
-                                                </div>
-
-                                                {/* Nested reply */}
-                                                <ul className="mt-6 space-y-6 border-l-2 border-indigo-100 pl-4 sm:pl-6">
-                                                    <li>
-                                                        <article className="flex gap-4">
-                                                            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Aarav Sharma" className="size-10 shrink-0 rounded-full object-cover" />
-                                                            <div className="min-w-0 flex-1">
-                                                                <div className="rounded-2xl rounded-tl-sm bg-indigo-50/70 p-5 ring-1 ring-indigo-100">
-                                                                    <div className="flex flex-wrap items-center justify-between gap-2">
-                                                                        <h3 className="flex items-center gap-2 font-semibold text-slate-900">
-                                                                            Aarav Sharma
-                                                                            <span className="rounded-full bg-indigo-600 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-white">Author</span>
-                                                                        </h3>
-                                                                        <time dateTime="2026-10-19" className="text-xs text-slate-500">Oct 19, 2026</time>
-                                                                    </div>
-                                                                    <p className="mt-2 text-[15px] leading-7 text-slate-700">Thank you, Ishita! Glad the breakdown helped. I'm planning a follow-up on <code className="rounded bg-white px-1 font-mono text-[0.9em] text-indigo-700">useReducer</code> and custom Hooks next month.</p>
-                                                                </div>
-                                                                <div className="mt-2 flex items-center gap-5 pl-2 text-sm">
-                                                                    <button type="button" aria-pressed="false" className="inline-flex cursor-pointer items-center gap-1.5 font-medium text-slate-500 transition hover:text-rose-600">
-                                                                        <svg className="size-4" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" /></svg>
-                                                                        Like <span className="text-slate-400">&middot; 8</span>
-                                                                    </button>
-                                                                    <button type="button" className="inline-flex cursor-pointer items-center gap-1.5 font-medium text-slate-500 transition hover:text-indigo-600">
-                                                                        <svg className="size-4" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" /></svg>
-                                                                        Reply
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        </article>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </article>
-                                    </li>
-
-                                    {/* Comment */}
-                                    <li>
-                                        <article className="flex gap-4">
-                                            <img src="https://randomuser.me/api/portraits/men/11.jpg" alt="Daniel Brooks" className="size-11 shrink-0 rounded-full object-cover" />
-                                            <div className="min-w-0 flex-1">
-                                                <div className="rounded-2xl rounded-tl-sm bg-slate-50 p-5 ring-1 ring-slate-100">
-                                                    <div className="flex flex-wrap items-center justify-between gap-2">
-                                                        <h3 className="font-semibold text-slate-900">Daniel Brooks</h3>
-                                                        <time dateTime="2026-10-20" className="text-xs text-slate-500">Oct 20, 2026</time>
-                                                    </div>
-                                                    <p className="mt-2 text-[15px] leading-7 text-slate-700">Great article. One question: should I always use the functional update form of the setter, or only when the new state depends on the previous one?</p>
-                                                </div>
-                                                <div className="mt-2 flex items-center gap-5 pl-2 text-sm">
-                                                    <button type="button" aria-pressed="false" className="inline-flex cursor-pointer items-center gap-1.5 font-medium text-slate-500 transition hover:text-rose-600">
-                                                        <svg className="size-4" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" /></svg>
-                                                        Like <span className="text-slate-400">&middot; 12</span>
-                                                    </button>
-                                                    <button type="button" className="inline-flex cursor-pointer items-center gap-1.5 font-medium text-slate-500 transition hover:text-indigo-600">
-                                                        <svg className="size-4" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" /></svg>
-                                                        Reply
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </article>
-                                    </li>
-
-                                    {/* Comment */}
-                                    <li>
-                                        <article className="flex gap-4">
-                                            <img src="https://randomuser.me/api/portraits/women/50.jpg" alt="Fatima Khan" className="size-11 shrink-0 rounded-full object-cover" />
-                                            <div className="min-w-0 flex-1">
-                                                <div className="rounded-2xl rounded-tl-sm bg-slate-50 p-5 ring-1 ring-slate-100">
-                                                    <div className="flex flex-wrap items-center justify-between gap-2">
-                                                        <h3 className="font-semibold text-slate-900">Fatima Khan</h3>
-                                                        <time dateTime="2026-10-20" className="text-xs text-slate-500">Oct 20, 2026</time>
-                                                    </div>
-                                                    <p className="mt-2 text-[15px] leading-7 text-slate-700">The cleanup example with setInterval saved me. I had a memory leak in a dashboard component for weeks and never figured out why. Thanks for sharing!</p>
-                                                </div>
-                                                <div className="mt-2 flex items-center gap-5 pl-2 text-sm">
-                                                    <button type="button" aria-pressed="false" className="inline-flex cursor-pointer items-center gap-1.5 font-medium text-slate-500 transition hover:text-rose-600">
-                                                        <svg className="size-4" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" /></svg>
-                                                        Like <span className="text-slate-400">&middot; 17</span>
-                                                    </button>
-                                                    <button type="button" className="inline-flex cursor-pointer items-center gap-1.5 font-medium text-slate-500 transition hover:text-indigo-600">
-                                                        <svg className="size-4" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" /></svg>
-                                                        Reply
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </article>
-                                    </li>
-                                </ul>
-
-                                <div className="mt-10 text-center">
-                                    <button type="button" className="cursor-pointer rounded-xl border border-slate-300 bg-white px-6 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-indigo-300 hover:bg-indigo-50 hover:text-indigo-700">Load more comments</button>
-                                </div>
-                            </section>
+                            {
+                                blogDetails &&
+                                <BlogComments blogId={blogDetails._id} totalComments={totalComments} setTotalComments={setTotalComments} errorHandler={errorHandler} />
+                            }
                         </div>
 
                         {/* ========== SIDEBAR (desktop only) ========== */}

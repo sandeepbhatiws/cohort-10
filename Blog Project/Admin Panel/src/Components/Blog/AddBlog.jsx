@@ -158,6 +158,9 @@ function BlogForm({ id }) {
   const formHandler = (event) => {
     event.preventDefault();
 
+    // const image = event.target;
+    // console.log(image);
+
     let newErrors = {};
 
     for (let key in validators) {
@@ -173,17 +176,20 @@ function BlogForm({ id }) {
       return;
     }
 
-    const data = {
-      category: formData.category,
-      title: formData.title.trim(),
-      username: formData.username.trim(),
-      date: formData.date,
-      published: formData.published == 'true',
-      total_comments: Number(formData.total_comments || 0),
-      total_likes: Number(formData.total_likes || 0),
-      short_description: formData.short_description.trim(),
-      description: formData.description.trim(),
-    }
+
+    // const data = {
+    //   category: formData.category,
+    //   title: formData.title.trim(),
+    //   username: formData.username.trim(),
+    //   date: formData.date,
+    //   published: formData.published == 'true',
+    //   total_comments: Number(formData.total_comments || 0),
+    //   total_likes: Number(formData.total_likes || 0),
+    //   short_description: formData.short_description.trim(),
+    //   description: formData.description.trim(),
+    // }
+
+    const data = event.target;
 
     setSubmitting(true);
 
@@ -224,6 +230,7 @@ function BlogForm({ id }) {
 
   const fields = [
     { name: 'title', label: 'Title', type: 'text', placeholder: 'Enter blog title', fullWidth: true },
+    { name: 'image', label: 'Choose Image', type: 'file', placeholder: 'Select Image', fullWidth: true },
     { name: 'category', label: 'Category', type: 'select', options: categoryOptions, placeholder: 'Select category' },
     { name: 'username', label: 'Username', type: 'text', placeholder: 'Enter author username' },
     { name: 'date', label: 'Date', type: 'date' },
