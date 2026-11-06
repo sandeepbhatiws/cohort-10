@@ -8,6 +8,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../Redux Toolkit/loginSlice';
+import socket from '../socket'
 
 export default function BlogDetails() {
 
@@ -93,6 +94,7 @@ export default function BlogDetails() {
     }, [blogDetails, isLogin]);
 
     const likeHandler = () => {
+
         if(!blogDetails){
             return;
         }
@@ -113,9 +115,17 @@ export default function BlogDetails() {
                 toast.error(result.data._message)
             }
         })
-        .catch(errorHandler)
+        .catch((errorHandler) => {
+            console.log(errorHandler)
+        })
         .finally(() => setLiking(false))
     }
+
+    useEffect(() => {
+        socket.on("likeBlog", (getData) => {
+            setTotalLikes(getData.total_likes)
+        });
+    }, [liking])
 
 
     return (

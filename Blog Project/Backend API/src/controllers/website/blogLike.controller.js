@@ -1,5 +1,6 @@
 const BlogModal = require('../../modal/Blog.js');
 const BlogLikeModal = require('../../modal/BlogLike.js');
+const { getIO } = require('../../socket.js');
 
 // Not liked yet -> adds the like, already liked -> removes the like
 exports.toggle = async(request, response) => {
@@ -65,8 +66,12 @@ exports.toggle = async(request, response) => {
             }
         }
 
+        const io = getIO();
+        io.emit('likeBlog', {'is_liked' : !removedLike, total_likes : blog.total_likes})
+
         return response.send(data);
     } catch (error) {
+        console.log(error)
         const data = {
             _status : false,
             _message : "Something went wrong.",

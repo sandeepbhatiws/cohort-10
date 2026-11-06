@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 import BlogCard from './Common/BlogCard'
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import socket from '../socket';
 
 export default function HomePage() {
 

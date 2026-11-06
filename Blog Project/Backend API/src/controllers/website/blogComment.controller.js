@@ -1,6 +1,7 @@
 const BlogModal = require('../../modal/Blog.js');
 const BlogCommentModal = require('../../modal/BlogComment.js');
 const { getErrorMessages } = require('../../helpers/common.js');
+const { getIO } = require('../../socket.js');
 
 // Counted from real comments ($inc would keep the hand entered total_comments of old blogs,
 // and the count would never match the comments shown under the blog)
@@ -42,6 +43,9 @@ exports.create = async(request, response) => {
         }).save();
 
         await updateTotalComments(blogId);
+
+        const io =  getIO();
+        io.emit('blogComment', result);
 
         const data = {
             _status : true,

@@ -1,4 +1,5 @@
 'use client'
+import socket from '@/app/socket';
 import axios from 'axios';
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
@@ -107,6 +108,11 @@ export default function BlogComments({ blogId, totalComments, setTotalComments, 
         })
         .catch(errorHandler)
     }
+
+    socket.on("blogComment", (getData) => {
+        console.log(getData);
+        loadComments(1)
+    });
 
     return (
         <>
